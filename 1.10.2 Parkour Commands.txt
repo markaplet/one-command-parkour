@@ -1,0 +1,108 @@
+## INIT DEFAULT VALUES
+INIT:/gamerule keepInventory true
+INIT:/gamerule commandBlockOutput false
+INIT:/gamerule logAdminCommands false
+INIT:/gamerule doDaylightCycle false
+INIT:/gamerule doTileDrops false
+INIT:/gamerule doMobSpawning false
+INIT:/gamerule mobGriefing false
+INIT:/gamerule showDeathMessages false
+INIT:/time set day
+INT:/weather clear 1000000
+
+
+## GIVE PLAYERS BUFFS
+/effect @a minecraft:regeneration 999999 31 true
+/effect @a minecraft:saturation 999999 1 true
+/effect @a minecraft:instant_health 999999 31 true
+/effect @a minecraft:weakness 999999 100 true
+/effect @a minecraft:resistance 999999 5 true
+
+
+## INIT SCOREBOARDS
+INIT:/scoreboard objectives add id dummy Unique Player ID
+INIT:/scoreboard objectives add onGround dummy
+INIT:/scoreboard objectives add killTimer dummy
+INIT:/scoreboard objectives add tempCP dummy
+INIT:/scoreboard objectives add tempID dummy
+INIT:/scoreboard objectives add checkPoint dummy
+INIT:/scoreboard objectives add carrotStick stat.useItem.minecraft.carrot_on_a_stick
+INIT:/scoreboard objectives add respawns dummy Number of Respawns
+INIT:/scoreboard objectives setdisplay sidebar respawns
+INIT:/scoreboard players set respawns 0
+INIT:/scoreboard objectives add playerQuit stat.leaveGame
+INIT:/scoreboard objectives add parkourMaster dummy
+
+
+# NEW PLAYER ON SERVER
+#/spawnpoint @a[x=1008,y=0,z=0,dx=272,dy=256,dz=272,m=0] 0 6 -2
+/tp @a[x=1008,y=0,z=0,dx=272,dy=256,dz=272,m=0] @e[type=ArmorStand,name=courseStart]
+/gamemode adventure @a[m=0]
+
+
+# NEW PLAYERS UNIQUE ID & WELCOME
+/scoreboard players add @a id 0
+/execute @a[score_id=0,c=1] ~ ~ ~ /title @a times 20 100 20
+/execute @a[score_id=0,c=1] ~ ~ ~ /title @a[score_id=0,c=1] title {"text":"WELCOME","bold":true,"color":"dark_purple"}
+/execute @a[score_id=0,c=1] ~ ~ ~ /title @a[score_id=0,c=1] subtitle {"text":"Ready to Parkour?","color":"blue"}
+/execute @a[score_id=0,c=1] ~ ~ ~ /scoreboard players set respawns 0
+/execute @a[score_id=0,c=1] ~ ~ ~ /give @a minecraft:carrot_on_a_stick 1 0 {Unbreakable:1,display:{Name:"Unstick",Lore:[Right click to reset if stuck]}}
+/execute @a[score_id=0,c=1] ~ ~ ~ /tellraw @a ["",{"selector":"@e[score_id=0,c=1]","bold":true,"color":"light_purple"},{"text":" "},{"text":"has joined the server!","color":"aqua"}]
+
+
+## PLAYERS RETURNING TO SERVER
+/execute @a[score_playerQuit_min=1] ~ ~ ~ /title @a[c=1] title {"text":"WELCOME BACK","bold":true,"color":"dark_purple"}
+/execute @a[score_playerQuit_min=1] ~ ~ ~ /title @a[c=1] subtitle {"text":"Ready to Parkour?","color":"blue"}
+/execute @a[score_playerQuit_min=1] ~ ~ ~ /tellraw @a ["",{"selector":"@a[score_playerQuit_min=1]","bold":true,"color":"light_purple"},{"text":" "},{"text":"has joined the server!","color":"aqua"}]
+/scoreboard players set @a[score_playerQuit_min=1] playerQuit 0
+
+
+## GIVE PLAYERS UNIQUE ID
+/execute @a[score_id=0,c=1] ~ ~ ~ /scoreboard players add #maxid id 1
+/execute @a[score_id=0,c=1] ~ ~ ~ /scoreboard players operation @a[c=1,r=0] id = #maxid id
+
+
+## SPAWN EGGS FOR COURSE START/END
+/execute @e[name=Course_Start] ~ ~ ~ /summon ArmorStand ~ ~ ~ {CustomName:"courseStart",NoGravity:1b,Invisible:1,Invulnerable:1}
+/tp @e[name=Course_Start] ~ ~-256 ~
+/execute @e[name=Course_End] ~ ~ ~ /summon ArmorStand ~ ~ ~ {CustomName:"courseEnd",NoGravity:1b,Invisible:1,Invulnerable:1}
+/tp @e[name=Course_End] ~ ~-256 ~
+
+## PLAYER IS STUCK
+/execute @a[score_carrotStick_min=1,score_carrotStick_min=1] ~ ~ ~ /tp @a[c=1] @e[type=ArmorStand,name=courseStart]
+/execute @a[score_carrotStick_min=1,score_carrotStick_min=1] ~ ~ ~ /scoreboard players set @a[c=1] respawns 0
+/execute @a[score_carrotStick_min=1,score_carrotStick_min=1] ~ ~ ~ /scoreboard players set @a[c=1] parkourMaster 1
+/scoreboard players set @a carrotStick 0
+
+
+## SCORE KEEPING
+/execute @a ~ ~ ~ detect ~ ~-1 ~ minecraft:barrier 0 /scoreboard players add @a[c=1] respawns 1
+
+
+## CONTROL PLAYER CHECKPOINTS
+/scoreboard players tag @a[tag=onBarrier] remove onBarrier
+/execute @a ~ ~ ~ detect ~ ~-1 ~ minecraft:barrier -1 scoreboard players tag @a[c=1] add onBarrier
+/scoreboard players set @a onGround 0
+/scoreboard players set @a[tag=!onBarrier] onGround 1 {OnGround:1b}
+/scoreboard players tag @a[tag=inStand] remove inStand
+/execute @a[score_onGround_min=1] ~ ~ ~ execute @e[type=ArmorStand,tag=checkPoint,r=1] ~ ~ ~ scoreboard players tag @a[r=1] add inStand
+/execute @a[score_onGround_min=1,tag=!inStand] ~ ~ ~ summon ArmorStand ~ ~ ~ {Tags:["newCheckPoint"],Invulnerable:1,Marker:1,NoGravity:1,Invisible:1}
+/execute @e[tag=newCheckPoint] ~ ~ ~ scoreboard players operation @e[tag=newCheckPoint,c=1] id = @a[c=1] id
+/entitydata @e[tag=newCheckPoint] {Tags:["checkPoint"]}
+/scoreboard players add @e[tag=checkPoint] killTimer 1
+/kill @e[tag=checkPoint,score_killTimer_min=200]
+/scoreboard players tag @a[tag=respawn] remove respawn
+/scoreboard players tag @a[tag=onBarrier,c=1] add respawn
+/execute @e[tag=checkPoint] ~ ~ ~ scoreboard players operation @e[tag=checkPoint,c=1] tempID = @e[tag=checkPoint,c=1] id
+/execute @e[tag=checkPoint] ~ ~ ~ scoreboard players operation @e[tag=checkPoint,c=1] tempID -= @a[tag=respawn,c=1] id
+/execute @a[tag=respawn] ~ ~ ~ tp @a[tag=respawn,c=1] @e[tag=checkPoint,score_tempID=0,score_tempID_min=0,c=1]
+
+
+## CONGRATULATE PLAYER
+#/execute @a[score_respawns=5,score_parkourMaster=1,score_parkourMaster_min=1] ~ ~ ~ detect ~ ~-2 ~ minecraft:gold_block -1 /scoreboard players set @a[c=1] parkourMaster 2
+/execute @e[type=ArmorStand,name=courseEnd] ~ ~ ~ /scoreboard players set @a[c=1,r=2,score_parkourMaster=1,score_parkourMaster_min=1] parkourMaster 2
+/execute @a[score_parkourMaster=2,score_parkourMaster_min=2] ~ ~ ~ /title @a[score_parkourMaster=2,score_parkourMaster_min=2] title {"text":"PARKOUR MASTER","bold":true,"color":"gold"}
+/execute @a[score_parkourMaster=2,score_parkourMaster_min=2] ~ ~ ~ /summon FireworksRocketEntity -1 15 119 {FireworksItem:{id:fireworks,Count:1,tag:{Fireworks:{Explosions:[{Type:1,Flicker:1,Trail:1,Colors:[14295039,8063231],FadeColors:[9338367,4143359]}]}}}}
+/execute @a[score_parkourMaster=2,score_parkourMaster_min=2] ~ ~ ~ /summon FireworksRocketEntity 0 10 124 {FireworksItem:{id:fireworks,Count:1,tag:{Fireworks:{Explosions:[{Type:0,Flicker:1,Trail:1,Colors:[2097144,8060870],FadeColors:[15597434,16759938]}]}}}}
+/execute @a[score_parkourMaster=2,score_parkourMaster_min=2] ~ ~ ~ /summon FireworksRocketEntity -4 20 120 {FireworksItem:{id:fireworks,Count:1,tag:{Fireworks:{Explosions:[{Type:0,Flicker:1,Trail:1,Colors:[16751641,13997823,16760253],FadeColors:[15597434,15167231,16734586]},{Type:1,Trail:1,Colors:[7802879,16711859,4382975],FadeColors:[4350719,16754940,13103871]},{Type:3,Flicker:1,Colors:[4217343],FadeColors:[16711680]}]}}}}
+/execute @a[score_parkourMaster=2,score_parkourMaster_min=2] ~ ~ ~ /scoreboard players set @a parkourMaster 3
