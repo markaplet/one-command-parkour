@@ -4,7 +4,7 @@ A one command creation is a 100% vanilla minecraft command block contraption tha
 
 ## Parkour System
 
-This contraption does not build a parkour course structure. Rather it only provides a base level scoring system, player checkpoint, teleportation on failure, and handful of other perks. It's up to your imagination in how you layout your course. Currently v1.0 offers only a handful features however, more features are planned so subscribe for updates.
+This contraption does not build a parkour course structure. Rather it only provides a base level scoring system, player checkpoint, teleportation on failure, and handful of other perks. It's up to your imagination in how you layout your course. Currently v1.1 offers only a handful features however, more features are planned so subscribe for updates.
 
 ## Game Setup
 
@@ -14,27 +14,32 @@ It seems that the currently popular trend in parkour is in a void world. While d
 
 Since this system relies on the barrier block, I recommend that you set up a new flat world with the following preset: **3;minecraft:barrier;127;** This will generate a flat world with only one layer of barrier blocks, thus giving you maximum build height and a foundation for which to build on without much effort.
 
+*UPDATE:*
+To help people get started, I created a world save file with the settings described above. I also marked out the worlds spawn chunks and a course area complete with a crude sample course for you to test out and start building in.
+
+[Download the Parkour Demo World](http://www.mediafire.com/file/9e1v5wq0aeus85n/ParkourDemoWorld.zip)
+
 ### Give Command Block
 
-For the sake of completeness, should you not be familiar with command blocks. Command blocks can only be obtained using the give command. In the chat type the following command **/give @p minecraft:command_block** If you are playing on a sever command blocks must be enabled in the server.properties file. You must also be in creative mode to access the GUI for the command block. If you need help, with this part, I would suggest going to YouTube and searching for something like "[command block give](https://www.youtube.com/results?search_query=command+block+give)"
+For the sake of completeness, or should you not be familiar with command blocks. Command blocks can only be obtained using the give command. In the chat type the following command **/give @p minecraft:command_block** If you are playing on a sever command blocks must be enabled in the server.properties file. You must also be in creative mode to access the GUI for the command block. If you need help, with this part, I would suggest going to YouTube and searching for something like "[command block give](https://www.youtube.com/results?search_query=command+block+give)"
 
 ### Install Command
 
-Once you have your world created and a command block in hand, the installation is incredibly simple. Place down your command block in an area clear of the course (5 block radius). Then copy the [this](http://pastebin.com/raw/Gk4W9x2B) command into the command block and give it a signal. (button, redstone block, lever, etc) The contraption will build it's self before your very eyes like magic.
+Once you have your world created and a command block in hand, the installation is incredibly simple. Place down your command block in an area clear of the course (5 block radius). Then copy the [this](http://pastebin.com/raw/1gSefBNK) command into the command block and give it a restone signal. (button, redstone block, lever, etc) The contraption will build it's self before your very eyes like magic.
 
-![](http://gph.is/1KjihQe)
+![](http://i.giphy.com/12NUbkX6p4xOO4.gif)
 
 ### Constructing your course
 
-The only rule to building a course is to ensure that any areas that players fall from contain barrier blocks below. Players do not have to fall on the 1 block layer as the floor of the world. You are free to build however you want, even if that is not a void. The only requirement is that in order to teleport a player, they must land on a barrier block. 
+The only rule to building a course is to ensure that any areas that players fall from contain barrier blocks below. Players do not have to fall on the 1 block layer as the floor of the world. You are free to build however you want, even if that is not a void. The only requirement is that in order to teleport a player, they must land on a barrier block.
 
 ### Set Course Start/End
 
-Attached to the front of the command block machine, there are two clickable signs to give yourself some spawn eggs for setting the start of the course and the end of the course. Use them at the appropriate locations to set the beginning and end of the course. 
+Attached to the front of the command block machine, there are two clickable signs to give yourself some spawn eggs for setting the start of the course and the end of the course. Use them at the appropriate locations to set the beginning and end of the course. Alternativly, you can rename any spawn egg to "Course_Start" and "Course_End".
 
 ### Carrot on a stick
 
-If for any reason a player wishes to return to the beginnig of the course and start over, for example they may want to improve their score, or they are stuck for any reason, right clicking with the carrot on a stick will return the player to wherever you marked as the start of the course. 
+If for any reason a player wishes to return to the beginnig of the course and start over, for example they may want to improve their score, or they are stuck for any reason, right clicking with the carrot on a stick will return the player to wherever you marked as the start of the course.
 
 ## Single vs Multiplayer
 
@@ -42,7 +47,13 @@ version 1.0 has only tested this with single player, however the commands were w
 
 ## Updates
 
-My plan for this tool is to update it with additional functionality and bug fixes as time allows. 
+My plan for this tool is to update it with additional functionality and bug fixes as time and interest allows. So what is in store for future versions?
+
+* Convert all command blocks to 1.11
+* Timer mode. Allows players to race against a clock
+* Multi Course Support
+* Bonus effect mode. Different blocks produce different buffs like speed/jump boost
+* Course builder tools. Allows map makers to add special effects to blocks like moving platforms, launchers, bouncers, and wall run to name a few popular features requested.
 
 ## Known Issues
 

@@ -8,7 +8,7 @@ INIT:/gamerule doMobSpawning false
 INIT:/gamerule mobGriefing false
 INIT:/gamerule showDeathMessages false
 INIT:/time set day
-INT:/weather clear 1000000
+INIT:/weather clear 1000000
 
 
 ## GIVE PLAYERS BUFFS
@@ -35,8 +35,8 @@ INIT:/scoreboard objectives add parkourMaster dummy
 
 
 # NEW PLAYER ON SERVER
-#/spawnpoint @a[x=1008,y=0,z=0,dx=272,dy=256,dz=272,m=0] 0 6 -2
-/tp @a[x=1008,y=0,z=0,dx=272,dy=256,dz=272,m=0] @e[type=ArmorStand,name=courseStart]
+#/spawnpoint @a[x=1008,y=0,z=0,dx=272,dy=256,dz=272] 0 6 -2
+/tp @a[x=1008,y=0,z=0,dx=272,dy=256,dz=272] @e[type=ArmorStand,name=courseStart]
 /gamemode adventure @a[m=0]
 
 
@@ -62,11 +62,21 @@ INIT:/scoreboard objectives add parkourMaster dummy
 /execute @a[score_id=0,c=1] ~ ~ ~ /scoreboard players operation @a[c=1,r=0] id = #maxid id
 
 
+# /give @p[c=1] minecraft:spawn_egg 1 101 {display:{Name:"Course_Start",Lore:[Place at course starting position]},EntityTag:{id:"Rabbit"}}
+# /give @p[c=1] minecraft:spawn_egg 1 58 {display:{Name:"Course_End",Lore:[Place at course end position]},EntityTag:{id:"Enderman"}}
+
+
 ## SPAWN EGGS FOR COURSE START/END
 /execute @e[name=Course_Start] ~ ~ ~ /summon ArmorStand ~ ~ ~ {CustomName:"courseStart",NoGravity:1b,Invisible:1,Invulnerable:1}
 /tp @e[name=Course_Start] ~ ~-256 ~
 /execute @e[name=Course_End] ~ ~ ~ /summon ArmorStand ~ ~ ~ {CustomName:"courseEnd",NoGravity:1b,Invisible:1,Invulnerable:1}
 /tp @e[name=Course_End] ~ ~-256 ~
+
+
+## MACHINE SPAWN EGG SIGNS
+#/give @p minecraft:spawn_egg 1 90 {display:{Name:"Course_Start",Lore:[Marks the begining of the course]},ench:[{id:2,lvl:1}],EntityTag:{id:"Pig"}}
+#/give @p minecraft:spawn_egg 1 58 {display:{Name:"Course_End",Lore:[Marks the end of the course]},ench:[{id:0,lvl:1}],EntityTag:{id:"Enderman"}}
+
 
 ## PLAYER IS STUCK
 /execute @a[score_carrotStick_min=1,score_carrotStick_min=1] ~ ~ ~ /tp @a[c=1] @e[type=ArmorStand,name=courseStart]
